@@ -6,4 +6,16 @@
     <description>A very durable and original charger | Box unpulled</description>
     <price>3000</price>
   </product>
+  <product>
+    <id>C-4477</id>
+    <name>Cable C-type</name>
+    <description>Fast charging cable</description>
+    <price>15</price>
+  </product>
+  <product>
+    <id>h-1244</id>
+    <name>headphone</name>
+    <description>sony headphones</description>
+    <price>35</price>
+  </product>
 </accessories>
