@@ -1,14 +1,16 @@
+// when page loads then fetch products from file and show in table
 $(document).ready(function () {
     fetchandShowProductsTable();
-
 });
 
-
+// ajax call to upload a new product
 $("#add-product-form").submit(function (e) {
 
+    // preventing the form to submit
     e.preventDefault();
+    // input validation 
     if (!checkEmptyFeilds()) {
-        //var form = new FormData(this); 
+
         var form = $(this);
         var url = form.attr("action");
 
@@ -31,8 +33,9 @@ $("#add-product-form").submit(function (e) {
     }
 });
 
-
+// AJAX call to delete product
 function deleteProduct(id) {
+
     var form = new FormData();
     form.append("index", id);
     var url = "/delete-product";
@@ -74,7 +77,7 @@ function getDeleteConfirmation(id) {
     })
 }
 
-
+// this function fetch the products and show in table
 function fetchandShowProductsTable() {
     $("#products-section").empty();
     $.ajax({
@@ -96,6 +99,7 @@ function checkEmptyFeilds() {
     }
 }
 
+// sweet alert generic function
 function showSweetAlert(alertTitle, alertText, alertIcon) {
     swal({
         title: alertTitle,
@@ -108,6 +112,7 @@ function updateProduct(id) {
     getProductById(id);
 }
 
+// AJAX call to get a product by index number
 function getProductById(id) {
     var form = new FormData();
     form.append("index", id);
@@ -125,6 +130,7 @@ function getProductById(id) {
     });
 }
 
+// opening the update modal in which details of clicked product will alreay be showing 
 function openAndPopulateUpdateModal(data,index){
     $("#edit-index").val(index);
     $("#edit-id").val(data.id);
@@ -134,7 +140,7 @@ function openAndPopulateUpdateModal(data,index){
     $("#edit-product-modal").modal("toggle");
 }
 
-
+// AJAX call to update a product
 $("#edit-product-form").submit(function (e) {
 
     e.preventDefault();
@@ -170,6 +176,7 @@ function checkEmptyFeildsOfUpdateModal() {
     }
 }
 
+// AJAX call for login, if login is successful the redirection is done
 $("#login-form").submit(function (e) {
 
     e.preventDefault();

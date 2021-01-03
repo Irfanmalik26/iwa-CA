@@ -20,17 +20,20 @@ router.use(express.urlencoded({
     extended: true
 })); //We allow the data sent from the client to be coming in as part of the URL in GET and POST requests
 router.use(express.json()); //We include support for JSON that is coming from the client
+// session to ensure that user is logged in or not
+// user details can also be stored
 router.use(session({
     secret: "irfanmalik",
-    resave:false,
+    resave: false,
     saveUninitialized: true
 }));
 
-
+// login page is rendered on this GET request
 router.get("/", (req, res) => {
     res.render("index");
 });
 
+// home page is opened on ths reuqest, only if user has logged in
 router.get("/home", (req, res) => {
     if (req.session.isLoggedIn) {
         res.writeHead(301, {
@@ -38,25 +41,30 @@ router.get("/home", (req, res) => {
         });
         res.end();
     } else {
+        // if user has not logged in, then go back to login page
         res.render("index");
     }
 });
 
+// flag of session (login flag) is set to false on logout and redirection is done to login page 
 router.get("/logout", (req, res) => {
     req.session.isLoggedIn = false;
     res.redirect("/");
 });
 
-
+// Login POST request
 router.post("/login", (req, res) => {
 
+    // input validation at server side
     if (!(req.body.username == "" || req.body.password == "")) {
         xmlFileToJs("loginCredentials.xml", function (err, result) {
             if (err) throw (err);
 
+            // santization of input at server side
             const username = sanitizer(req.body.username);
             const password = sanitizer(req.body.password);
 
+            // loop through all the user crednetials and checking 
             const numberOfUsers = result.users.credentials.length;
             for (var i = 0; i < numberOfUsers; i++) {
                 if (result.users.credentials[i].username == username && result.users.credentials[i].password == password) {
@@ -88,18 +96,21 @@ router.get("/getProducts", (req, res) => {
     res.end(result.toString());
 });
 
-
+// POST request to add a new product
 router.post("/add-product", (req, res) => {
 
+    // input validation at server side
     if (!(req.body.id == "" || req.body.name == "" || req.body.description == "" || req.body.price == "")) {
         xmlFileToJs("mobileAccessories.xml", function (err, result) {
             if (err) throw (err);
 
+            // santization of input at server side
             const id = sanitizer(req.body.id);
             const name = sanitizer(req.body.name);
             const description = sanitizer(req.body.description);
             const price = sanitizer(req.body.price);
 
+            // pushing the new details of product
             result.accessories.product.push({
                 "id": id,
                 "name": name,
@@ -116,14 +127,17 @@ router.post("/add-product", (req, res) => {
     }
 });
 
-
+// POST request to delete a product
 router.post("/delete-product", (req, res) => {
     var deleteFlag = true;
     if (!(req.body.index == "")) {
         xmlFileToJs("mobileAccessories.xml", function (err, result) {
             if (err) throw (err);
 
+            // santization of input at server side
             const index = sanitizer(req.body.index);
+            // if it is the last product then don't delete it and show user error message
+            // as all the products should not be deleted. Atleast 1 product should be kept in the system
             if (result.accessories.product.length == 1) {
                 deleteFlag = false;
             } else {
@@ -148,13 +162,14 @@ router.post("/delete-product", (req, res) => {
     }
 });
 
+// request to get products by index number (for update)
 router.post("/get-product-by-id", (req, res) => {
     var resultObj = null;
     xmlFileToJs("mobileAccessories.xml", function (err, result) {
         if (err) throw (err);
+        // santization of input at server side
         const id = sanitizer(req.body.id);
         resultObj = result.accessories.product[id - 1];
-        console.log(resultObj);
     });
 
     setTimeout(() => {
@@ -168,17 +183,20 @@ router.post("/update-product", (req, res) => {
         xmlFileToJs("mobileAccessories.xml", function (err, result) {
             if (err) throw (err);
 
+            // santization of input at server side
             const index = sanitizer(req.body.index);
             const id = sanitizer(req.body.id);
             const name = sanitizer(req.body.name);
             const description = sanitizer(req.body.description);
             const price = sanitizer(req.body.price);
 
+            // getting the updated product by index and changing the details
             result.accessories.product[index - 1].id = id;
             result.accessories.product[index - 1].name = name;
             result.accessories.product[index - 1].description = description;
             result.accessories.product[index - 1].price = price;
 
+            // saving the updated records
             jsToXmlFile('mobileAccessories.xml', result, function (err) {
                 if (err) console.log(err);
             });
@@ -212,10 +230,6 @@ function jsToXmlFile(filename, obj, cb) {
     fs.writeFile(filepath, xml, cb);
 }
 // [END] Reference: These functions are taken from the provided node project (iwa-main) 
-
-
-
-
 
 const host = "127.0.0.1";
 const port = 3000;

@@ -6,4 +6,22 @@
     <description>A very durable and hard sillicon cover</description>
     <price>200</price>
   </product>
+  <product>
+    <id>P-2323</id>
+    <name>Iphone charger</name>
+    <description>A very durable and original charger | Box unpulled</description>
+    <price>3000</price>
+  </product>
+  <product>
+    <id>F-1231</id>
+    <name>Bluetooth Speakers</name>
+    <description>Amazing speakers</description>
+    <price>5000</price>
+  </product>
+  <product>
+    <id>GG-76</id>
+    <name>Wireless Pods</name>
+    <description>Apple's original airpod, very durable, premium quality</description>
+    <price>5000</price>
+  </product>
 </accessories>
