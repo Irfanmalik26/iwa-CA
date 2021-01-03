@@ -1,0 +1,22 @@
+{
+  "name": "iwa-ca",
+  "version": "1.0.0",
+  "description": "Mobile Accessories",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Irfanmalik26/iwa-CA.git"
+  },
+  "author": "IrfanMalik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Irfanmalik26/iwa-CA/issues"
+  },
+  "homepage": "https://github.com/Irfanmalik26/iwa-CA#readme",
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
