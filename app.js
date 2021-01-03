@@ -9,6 +9,7 @@ const sanitizer = require("sanitize-html");
 const {
     stringify
 } = require("querystring");
+const session = require("express-session");
 
 
 router = express();
@@ -19,10 +20,55 @@ router.use(express.urlencoded({
     extended: true
 })); //We allow the data sent from the client to be coming in as part of the URL in GET and POST requests
 router.use(express.json()); //We include support for JSON that is coming from the client
+router.use(session({
+    secret: "irfanmalik",
+    resave:false,
+    saveUninitialized: true
+}));
 
 
 router.get("/", (req, res) => {
     res.render("index");
+});
+
+router.get("/home", (req, res) => {
+    if (req.session.isLoggedIn) {
+        res.writeHead(301, {
+            Location: 'home.html'
+        });
+        res.end();
+    } else {
+        res.render("index");
+    }
+});
+
+router.get("/logout", (req, res) => {
+    req.session.isLoggedIn = false;
+    res.redirect("/");
+});
+
+
+router.post("/login", (req, res) => {
+
+    if (!(req.body.username == "" || req.body.password == "")) {
+        xmlFileToJs("loginCredentials.xml", function (err, result) {
+            if (err) throw (err);
+
+            const username = sanitizer(req.body.username);
+            const password = sanitizer(req.body.password);
+
+            const numberOfUsers = result.users.credentials.length;
+            for (var i = 0; i < numberOfUsers; i++) {
+                if (result.users.credentials[i].username == username && result.users.credentials[i].password == password) {
+                    req.session.isLoggedIn = true;
+                    res.end("1");
+                }
+            }
+            res.end("0");
+        });
+    } else {
+        res.end("0");
+    }
 });
 
 router.get("/getProducts", (req, res) => {
@@ -128,10 +174,10 @@ router.post("/update-product", (req, res) => {
             const description = sanitizer(req.body.description);
             const price = sanitizer(req.body.price);
 
-            result.accessories.product[index-1].id = id;
-            result.accessories.product[index-1].name = name;
-            result.accessories.product[index-1].description = description;
-            result.accessories.product[index-1].price = price;
+            result.accessories.product[index - 1].id = id;
+            result.accessories.product[index - 1].name = name;
+            result.accessories.product[index - 1].description = description;
+            result.accessories.product[index - 1].price = price;
 
             jsToXmlFile('mobileAccessories.xml', result, function (err) {
                 if (err) console.log(err);

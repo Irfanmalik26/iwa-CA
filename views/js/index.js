@@ -169,3 +169,29 @@ function checkEmptyFeildsOfUpdateModal() {
         return false;
     }
 }
+
+$("#login-form").submit(function (e) {
+
+    e.preventDefault();
+
+    if (!($("#username").val()=="" || $("#password").val()=="" )) {
+        var form = $(this);
+        var url = form.attr("action");
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function (data) {
+                if(data==1){
+                    window.location.replace("http://127.0.0.1:3000/home");
+                }
+                else if (data == 0) {
+                    showSweetAlert("Oops!", "An error occurred.Looks like invalid username/password", "error");                    
+                } 
+            }
+        });
+    } else {
+        showSweetAlert("Ohh no no!", "Please enter all values", "warning");
+    }
+});
