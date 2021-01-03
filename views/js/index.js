@@ -191,7 +191,9 @@ $("#login-form").submit(function (e) {
             data: form.serialize(),
             success: function (data) {
                 if(data==1){
-                    window.location.replace("http://127.0.0.1:3000/home");
+                    const url = window.location.href;
+                    //alert(url);
+                    window.location.replace(url+"home");
                 }
                 else if (data == 0) {
                     showSweetAlert("Oops!", "An error occurred.Looks like invalid username/password", "error");                    
