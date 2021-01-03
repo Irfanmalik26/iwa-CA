@@ -1,9 +1,11 @@
+/* [SART] Reference: this css is taken from the provided node project (iwa-main) */
 html {
   position: relative;
   min-height: 100%;
 }
 body {
   margin-bottom: 60px;
+  background-color: white;
 }
 .footer {
   position: absolute;
@@ -13,24 +15,20 @@ body {
   line-height: 60px;
   background-color: #f5f5f5;
 }
-table, th, td {
-     border-collapse: collapse;
-     border: 1px solid black;
-     text-align: center;
+/* [END] Reference: this css is taken from the provided node project (iwa-main) */
+
+.bs{
+  border: 1px solid black;
 }
- table {
-     border-collapse: collapse;
-     width:100%;
+.blue{
+  color: blue;
 }
- td, th {
-     border: 1px solid #ced4da;
-     padding: 0.5rem;
-     text-align: left;
+
+.red{
+  color: red;
 }
- th {
-     font-weight: bold;
-}
-.selected {
-            background-color: #dc3545;
-            color: #FFF;
+.add-new-product-section{
+  padding:20px;
+  border: 1px solid lightgreen;
+  border-radius: 20px;
 }
