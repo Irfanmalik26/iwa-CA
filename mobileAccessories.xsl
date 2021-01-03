@@ -27,12 +27,12 @@
                         </td>
                         <td>
                             <a href="#" onclick='updateProduct(`{position()}`)'>
-                                <i class="fas fa-edit blue" title="Update Product"></i>
+                                <i class="medium material-icons blue" title="Update Product">edit</i>
                             </a>
                         </td>
                         <td>
-                            <a href="#"  onclick='deleteProduct(`{position()}`)'>
-                                <i class="fas fa-trash red" title="Delete Product"></i>
+                            <a href="#" onclick='getDeleteConfirmation(`{position()}`)'>
+                                <i class="medium material-icons red" title="Delete Product">delete</i>
                             </a>
                         </td>
                     </tr>

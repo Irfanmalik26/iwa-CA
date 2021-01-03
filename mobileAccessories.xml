@@ -1,27 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <accessories>
   <product>
-    <id>w-231</id>
-    <name>Cable</name>
-    <description>Original Cable</description>
-    <price>120</price>
-  </product>
-  <product>
-    <id>I-091</id>
-    <name>Charger</name>
-    <description>Original Chager</description>
-    <price>500</price>
-  </product>
-  <product>
-    <id>H-001</id>
-    <name>Handsfree</name>
-    <description>Amazing Quality</description>
-    <price>300</price>
-  </product>
-  <product>
-    <id>1212</id>
-    <name>1212</name>
-    <description>1212</description>
-    <price>1212</price>
+    <id>I-1213</id>
+    <name>Sillicon Cover</name>
+    <description>A very durable and hard sillicon cover</description>
+    <price>200</price>
   </product>
 </accessories>

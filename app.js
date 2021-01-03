@@ -5,6 +5,10 @@ const fs = require("fs");
 const xmlParse = require("xslt-processor").xmlParse;
 const xsltProcess = require("xslt-processor").xsltProcess;
 const xml2js = require('xml2js');
+const sanitizer = require("sanitize-html");
+const {
+    stringify
+} = require("querystring");
 
 
 router = express();
@@ -25,31 +29,119 @@ router.get("/getProducts", (req, res) => {
     // setting the content type
     res.writeHead(200, {
         'Content-Type': 'text/html'
-    }); 
+    });
 
-    var xml = fs.readFileSync('mobileAccessories.xml', 'utf8'); 
-    var xsl = fs.readFileSync('mobileAccessories.xsl', 'utf8'); 
+    var xml = fs.readFileSync('mobileAccessories.xml', 'utf8');
+    var xsl = fs.readFileSync('mobileAccessories.xsl', 'utf8');
 
-    var doc = xmlParse(xml); 
-    var stylesheet = xmlParse(xsl); 
+    var doc = xmlParse(xml);
+    var stylesheet = xmlParse(xsl);
 
-    var result = xsltProcess(doc, stylesheet); 
+    var result = xsltProcess(doc, stylesheet);
 
-    res.end(result.toString()); 
+    res.end(result.toString());
 });
 
 
 router.post("/add-product", (req, res) => {
-    //
+
+    if (!(req.body.id == "" || req.body.name == "" || req.body.description == "" || req.body.price == "")) {
+        xmlFileToJs("mobileAccessories.xml", function (err, result) {
+            if (err) throw (err);
+
+            const id = sanitizer(req.body.id);
+            const name = sanitizer(req.body.name);
+            const description = sanitizer(req.body.description);
+            const price = sanitizer(req.body.price);
+
+            result.accessories.product.push({
+                "id": id,
+                "name": name,
+                "description": description,
+                "price": price
+            });
+            jsToXmlFile('mobileAccessories.xml', result, function (err) {
+                if (err) console.log(err);
+            });
+        });
+        res.end("1");
+    } else {
+        res.end("0");
+    }
+});
+
+
+router.post("/delete-product", (req, res) => {
+    var deleteFlag = true;
+    if (!(req.body.index == "")) {
+        xmlFileToJs("mobileAccessories.xml", function (err, result) {
+            if (err) throw (err);
+
+            const index = sanitizer(req.body.index);
+            if (result.accessories.product.length == 1) {
+                deleteFlag = false;
+            } else {
+                delete result.accessories.product[index - 1];
+
+                jsToXmlFile('mobileAccessories.xml', result, function (err) {
+                    if (err) console.log(err);
+                });
+            }
+        });
+        setTimeout(() => {
+            if (deleteFlag) {
+                console.log("ok")
+                res.end("1");
+            } else {
+                console.log("no")
+                res.end("-1");
+            }
+        }, 500);
+    } else {
+        res.end("0");
+    }
+});
+
+router.post("/get-product-by-id", (req, res) => {
+    var resultObj = null;
     xmlFileToJs("mobileAccessories.xml", function (err, result) {
         if (err) throw (err);
-        
-        result.accessories.product.push({"id":req.body.id,"name":req.body.name,"description":req.body.description,"price":req.body.price});
-        jsToXmlFile('mobileAccessories.xml', result, function(err){
-            if (err) console.log(err);
-        });
+        const id = sanitizer(req.body.id);
+        resultObj = result.accessories.product[id - 1];
+        console.log(resultObj);
     });
-    res.end("1");
+
+    setTimeout(() => {
+        res.json(resultObj);
+    }, 500);
+});
+
+router.post("/update-product", (req, res) => {
+
+    if (!(req.body.index == "" || req.body.id == "" || req.body.name == "" || req.body.description == "" || req.body.price == "")) {
+        xmlFileToJs("mobileAccessories.xml", function (err, result) {
+            if (err) throw (err);
+
+            const index = sanitizer(req.body.index);
+            const id = sanitizer(req.body.id);
+            const name = sanitizer(req.body.name);
+            const description = sanitizer(req.body.description);
+            const price = sanitizer(req.body.price);
+
+            result.accessories.product[index-1].id = id;
+            result.accessories.product[index-1].name = name;
+            result.accessories.product[index-1].description = description;
+            result.accessories.product[index-1].price = price;
+
+            jsToXmlFile('mobileAccessories.xml', result, function (err) {
+                if (err) console.log(err);
+            });
+        });
+        res.end("1");
+    } else {
+        res.end("0");
+    }
+
 });
 
 
