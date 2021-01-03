@@ -125,13 +125,13 @@ function getProductById(id) {
             "id": id
         },
         success: function (data) {
-            openAndPopulateUpdateModal(data,id);
+            openAndPopulateUpdateModal(data, id);
         }
     });
 }
 
 // opening the update modal in which details of clicked product will alreay be showing 
-function openAndPopulateUpdateModal(data,index){
+function openAndPopulateUpdateModal(data, index) {
     $("#edit-index").val(index);
     $("#edit-id").val(data.id);
     $("#edit-name").val(data.name);
@@ -181,7 +181,7 @@ $("#login-form").submit(function (e) {
 
     e.preventDefault();
 
-    if (!($("#username").val()=="" || $("#password").val()=="" )) {
+    if (!($("#username").val() == "" || $("#password").val() == "")) {
         var form = $(this);
         var url = form.attr("action");
 
@@ -190,17 +190,22 @@ $("#login-form").submit(function (e) {
             url: url,
             data: form.serialize(),
             success: function (data) {
-                if(data==1){
+                if (data == 1) {
                     const url = window.location.href;
-                    //alert(url);
-                    window.location.replace(url+"home");
+                    window.location.replace(url + "home");
+                } else if (data == 0) {
+                    showSweetAlert("Oops!", "An error occurred.Looks like invalid username/password", "error");
                 }
-                else if (data == 0) {
-                    showSweetAlert("Oops!", "An error occurred.Looks like invalid username/password", "error");                    
-                } 
             }
         });
     } else {
         showSweetAlert("Ohh no no!", "Please enter all values", "warning");
     }
 });
+
+function logout() {
+    let url = window.location.href;
+    var r = /[^\/]*$/;
+    url = url.replace(r, '');
+    window.location.replace(url + "logout");
+}
